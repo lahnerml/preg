@@ -18,6 +18,7 @@ int main(int argc, char **argv) {
   trayIcon->show();
   mainwindow w;
   bool isVisible = true;
+  w.setWindowIcon(oIcon);
 
   QEventLoop::connect(trayIcon, &QSystemTrayIcon::activated, [&]() {
     w.setVisible(isVisible);
