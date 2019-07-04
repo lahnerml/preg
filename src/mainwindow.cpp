@@ -48,8 +48,9 @@ void mainwindow::set_current_status() {
   QString result;
   // Only values between 0 and 280 are valid.
   if (0 <= days && days < 280) {
-    result = QString("Week %1").arg(days / 7);
-    result.append(QString(" + %1").arg(days % 7));
+    result = QString("Week %1").arg(days / 7 + 1);
+    result.append(QString(": W%1").arg(days / 7));
+    result.append(QString(" +%1").arg(days % 7));
     result.append(QString(" (%1 days)").arg(days));
   } else {
     result = "";
