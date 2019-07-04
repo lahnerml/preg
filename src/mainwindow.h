@@ -1,8 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
 #include <QDate>
+#include <QMainWindow>
 
 namespace Ui {
 class mainwindow;
@@ -16,11 +16,16 @@ public:
   ~mainwindow();
 
 public Q_SLOTS:
+  /** Slots catching input from respective calendar widgets and displaying the
+   * respective information.
+   */
   void set_start_date();
   void set_birth_date();
   void set_current_status();
 
 protected:
+  /** Overwrite closeEvent to save entered dates.
+   */
   void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
 
 private:
@@ -28,7 +33,12 @@ private:
   QDate m_start_date;
   QDate m_birth_date;
 
+  /** Read previously entered dates
+   */
   void load_settings();
+
+  /** Write selected dates to disk
+   */
   void save_settings();
 };
 

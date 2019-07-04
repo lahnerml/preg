@@ -9,10 +9,12 @@ mainwindow::mainwindow(QWidget *parent)
     : QWidget(parent), ui(new Ui::mainwindow) {
   ui->setupUi(this);
 
+  // Update displayed values every 5 seconds to cope with date changes.
   QTimer *timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, &::mainwindow::set_current_status);
   timer->start(5000);
 
+  // Connect calendar signals to slots.
   connect(ui->projected_birth_widget, &QCalendarWidget::selectionChanged, this,
           &::mainwindow::set_start_date);
   connect(ui->projected_start_widget, &QCalendarWidget::selectionChanged, this,
@@ -22,6 +24,7 @@ mainwindow::mainwindow(QWidget *parent)
   connect(ui->projected_birth_widget, &QCalendarWidget::selectionChanged, this,
           &::mainwindow::set_current_status);
 
+  // Read previously entered values.
   load_settings();
 }
 
@@ -43,6 +46,7 @@ void mainwindow::set_current_status() {
   QDate today = QDate::currentDate();
   qint64 days = m_start_date.daysTo(today);
   QString result;
+  // Only values between 0 and 280 are valid.
   if (0 <= days && days < 280) {
     result = QString("Week %1").arg(days / 7);
     result.append(QString(" + %1").arg(days % 7));
