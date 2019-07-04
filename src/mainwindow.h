@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <array>
 #include <QDate>
 #include <QMainWindow>
 
@@ -32,6 +33,9 @@ private:
   Ui::mainwindow *ui;
   QDate m_start_date;
   QDate m_birth_date;
+  std::array<double, 41> m_average_size;
+  std::array<int, 41> m_average_weight;
+
 
   /** Read previously entered dates
    */
