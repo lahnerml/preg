@@ -33,8 +33,8 @@ private:
   Ui::mainwindow *ui;
   QDate m_start_date;
   QDate m_birth_date;
-  std::array<double, 41> m_average_size;
-  std::array<int, 41> m_average_weight;
+  const std::array<double, 43> m_average_size;
+  const std::array<int, 43> m_average_weight;
 
 
   /** Read previously entered dates
