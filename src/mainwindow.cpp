@@ -58,27 +58,35 @@ void mainwindow::set_current_status() {
   QDate today = QDate::currentDate();
   qint64 days = m_start_date.daysTo(today);
   QString result, measures;
-  double avg_size;
-  int avg_weight;
+  double avg_size_this, avg_size_next, size_diff;
+  int avg_weight_this, avg_weight_next, weight_diff;
 
-  // Only values between 0 and 280 are valid.
-  if (0 <= days && days < 280) {
+  // Only values between 0 and 280 are valid, allow almost 3 weeks
+  if (0 <= days && days < 300) {
     int weeks = days / 7;
-    avg_size = m_average_size[weeks + 1];
-    avg_weight = m_average_weight[weeks + 1];
+    int d = days % 7;
+    avg_size_this = m_average_size[weeks + 1];
+    avg_size_next = m_average_size[weeks + 2];
+    size_diff = avg_size_next - avg_size_this;
+
+    avg_weight_this = m_average_weight[weeks + 1];
+    avg_weight_next = m_average_weight[weeks + 2];
+    weight_diff = avg_weight_next - avg_weight_this;
 
     result = QString("Week %1").arg(weeks + 1);
     result.append(QString(": W%1").arg(weeks));
-    result.append(QString(" +%1").arg(days % 7));
-    result.append(QString(" (%1 days)").arg(days));
-    measures = QString("📏 %1 cm").arg(avg_size);
-    measures.append(QString("\t ⚖ %1 g").arg(avg_weight));
+    result.append(QString(" +%1").arg(d));
+    result.append(QString(" (%1 days,").arg(days));
+    result.append(QString(" %1 remaining)").arg(280 - days));
+    measures = QString("📏 %1 cm").arg(avg_size_this + d / 7. * size_diff);
+    measures.append(
+        QString("\t ⚖ %1 g").arg(avg_weight_this + d / 7. * weight_diff));
   } else {
     result = "";
     measures = "";
     days = 0;
-    avg_size = 0.0;
-    avg_weight = 0;
+    avg_size_this = 0.0;
+    avg_weight_this = 0;
   }
   ui->output_label->setText(result);
   ui->output_label_measures->setText(measures);
