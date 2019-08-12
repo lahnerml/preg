@@ -103,13 +103,13 @@ void mainwindow::set_current_status() {
     result.append(QString(" %1 remaining; ").arg(280 - days));
     result.append(QString("%1").arg(month));
     if (month == 1) {
-        result.append(QString("st "));
+      result.append(QString("st "));
     } else if (month == 2) {
-        result.append(QString("nd "));
+      result.append(QString("nd "));
     } else if (month == 3) {
-        result.append(QString("rd "));
+      result.append(QString("rd "));
     } else {
-        result.append(QString("th "));
+      result.append(QString("th "));
     }
     result.append(QString("month)"));
     measures = QString("📏 %1 cm").arg(avg_size_this + d / 7. * size_diff);
