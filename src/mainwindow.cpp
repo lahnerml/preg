@@ -65,6 +65,7 @@ void mainwindow::set_current_status() {
   if (0 <= days && days < 300) {
     int weeks = days / 7;
     int d = days % 7;
+    int month = weeks / 4 + 1;
     avg_size_this = m_average_size[weeks + 1];
     avg_size_next = m_average_size[weeks + 2];
     size_diff = avg_size_next - avg_size_this;
@@ -77,7 +78,18 @@ void mainwindow::set_current_status() {
     result.append(QString(": W%1").arg(weeks));
     result.append(QString(" +%1").arg(d));
     result.append(QString(" (%1 days,").arg(days));
-    result.append(QString(" %1 remaining)").arg(280 - days));
+    result.append(QString(" %1 remaining; ").arg(280 - days));
+    result.append(QString("%1").arg(month));
+    if (month == 1) {
+        result.append(QString("st "));
+    } else if (month == 2) {
+        result.append(QString("nd "));
+    } else if (month == 3) {
+        result.append(QString("rd "));
+    } else {
+        result.append(QString("th "));
+    }
+    result.append(QString("month)"));
     measures = QString("📏 %1 cm").arg(avg_size_this + d / 7. * size_diff);
     measures.append(
         QString("\t ⚖ %1 g").arg(avg_weight_this + d / 7. * weight_diff));
