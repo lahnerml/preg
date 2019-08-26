@@ -88,19 +88,34 @@ void mainwindow::set_current_status() {
     int weeks = days / 7;
     int d = days % 7;
     int month = weeks / 4 + 1;
-    avg_size_this = m_average_size[weeks + 1];
-    avg_size_next = m_average_size[weeks + 2];
-    size_diff = avg_size_next - avg_size_this;
 
+    avg_size_this = m_average_size[weeks + 1];
     avg_weight_this = m_average_weight[weeks + 1];
-    avg_weight_next = m_average_weight[weeks + 2];
+    // Before week 20 we measure crown to rump, from week 20 onwards we measure
+    // crown to heel.  Do not generate a fast growing baby in week 19.
+    // Also, do not let baby shrink if its overdue.
+    if (weeks == 18) {
+      avg_size_next = 16.4;
+      avg_weight_next = m_average_weight[weeks + 2];
+    } else if (weeks >= 40) {
+      avg_size_this = m_average_size[42];
+      avg_size_next = m_average_size[42];
+      avg_weight_this = m_average_weight[42];
+      avg_weight_next = m_average_weight[42];
+    } else {
+      avg_weight_next = m_average_weight[weeks + 2];
+      avg_size_next = m_average_size[weeks + 2];
+    }
+
+    size_diff = avg_size_next - avg_size_this;
     weight_diff = avg_weight_next - avg_weight_this;
 
     result = QString("Week %1").arg(weeks + 1);
     result.append(QString(": W%1").arg(weeks));
     result.append(QString(" +%1").arg(d));
     result.append(QString(" (%1 days,").arg(days));
-    result.append(QString(" %1 remaining; ").arg(280 - days));
+    days > 280 ? result.append(QString("%1 days overdue; ").arg(days - 280))
+               : result.append(QString(" %1 remaining; ").arg(280 - days));
     result.append(QString("%1").arg(month));
     if (month == 1) {
       result.append(QString("st "));
@@ -113,6 +128,8 @@ void mainwindow::set_current_status() {
     }
     result.append(QString("month)"));
     measures = QString("📏 %1 cm").arg(avg_size_this + d / 7. * size_diff);
+    weeks < 19 ? measures.append(QString(" (crown to rump)"))
+               : measures.append(QString(" (crown to heel)"));
     measures.append(
         QString("\t ⚖ %1 g").arg(avg_weight_this + d / 7. * weight_diff));
   } else {
